@@ -1,0 +1,35 @@
+User 
+- active: true
+- displayName: String
+- noOfPosts: int
+- profile: Map {
+  coverPhotoUrl: String,
+  email: String,
+  photoUrl: String,
+  provider: String
+}
+
+Posts
+- postId: ID
+- caption: String
+- user: Map {
+  userId: ID,
+  email: String,
+  photoUrl: String,
+  displayName: String
+}
+- images: Map {
+  imageUrl: String,
+  likes: int,
+}
+
+Questions 
+- questionsId: ID
+- question: String
+- user: Map {
+  userId: ID,
+  displayName: String,
+  profileUrl: String,
+  email: String,
+}
+
