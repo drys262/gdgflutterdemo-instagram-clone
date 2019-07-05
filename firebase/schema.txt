@@ -1,7 +1,12 @@
-User 
+@ users/userId 
 - active: true
 - displayName: String
 - noOfPosts: int
+- tokens/tokenId: Map {
+  platform: String,
+  createdAt: Timestamp,
+  token: tokenId
+}
 - profile: Map {
   coverPhotoUrl: String,
   email: String,
@@ -9,8 +14,14 @@ User
   provider: String
 }
 
-Posts
-- postId: ID
+@ history/userId/
+- action: String
+- resourceId: String,
+- message: String
+- createdAt: Timestamp
+
+
+@ posts/postId
 - caption: String
 - user: Map {
   userId: ID,
@@ -23,7 +34,7 @@ Posts
   likes: int,
 }
 
-Questions 
+@ questions/questionId
 - questionsId: ID
 - question: String
 - user: Map {
@@ -36,11 +47,11 @@ Questions
 
 Tasks
 
-- Fix bug when adding post (images key bug)
-- Set up CF to save activities every time a new post is added.
+- Fix bug when adding post (images key bug)  @@ DONE
+- Set up CF to save to history every time a new post is added.  @@ DONE
 - Add Like to Post functionality.
-- Add Push notifications every time there is a new post.
-- Save Device Token when app is starting.
+- Add Push notifications every time there is a new post. @@ DOING
+- Save Device Token when app is starting. @@ DONE
 - Let the user see who likes the post.
 - Add VideoCall Functionality.
 - Add Profile Section.

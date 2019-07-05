@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gdgflutterdemo/util/helper.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_alert_dialog.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_button.dart';
 import 'package:gdgflutterdemo/util/platform.dart' show isIOS;
 
 class ProfileScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  const ProfileScreen({Key key, this.scaffoldKey}) : super(key: key);
+
   void yesHandler(BuildContext context) {
     logout();
     Navigator.pop(context);
@@ -41,21 +44,24 @@ class ProfileScreen extends StatelessWidget {
       ),
     ];
     Function show = isIOS ? showCupertinoDialog : showDialog;
-    return Center(
-      child: AdaptiveButton(
-        onPressed: () {
-          show(
-            context: context,
-            builder: (BuildContext context) {
-              return AdaptiveAlertDialog(
-                dialogTitle: logoutWarningTitle,
-                content: logoutWarningMessage,
-                actions: isIOS ? iosActions : androidActions,
-              );
-            },
-          );
-        },
-        text: "Logout",
+    return Scaffold(
+      key: scaffoldKey,
+      body: Center(
+        child: AdaptiveButton(
+          onPressed: () {
+            show(
+              context: context,
+              builder: (BuildContext context) {
+                return AdaptiveAlertDialog(
+                  dialogTitle: logoutWarningTitle,
+                  content: logoutWarningMessage,
+                  actions: isIOS ? iosActions : androidActions,
+                );
+              },
+            );
+          },
+          text: "Logout",
+        ),
       ),
     );
   }

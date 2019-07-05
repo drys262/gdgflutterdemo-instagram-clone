@@ -1,8 +1,5 @@
 const admin = require("firebase-admin");
-
 var db = admin.firestore();
-const settings = { timestampsInSnapshots: true };
-db.settings(settings);
 
 function uploadUrlToPollDb(file, postId, postImageId) {
   return file.getSignedUrl({ action: "read", expires: "01-01-2030" }).then(

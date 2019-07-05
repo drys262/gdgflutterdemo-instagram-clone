@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:gdgflutterdemo/config/application.dart';
+import 'package:gdgflutterdemo/data/app_state.dart';
+import 'package:gdgflutterdemo/util/helper.dart';
 import 'package:gdgflutterdemo/widgets/helper_widgets.dart';
-
 import 'package:gdgflutterdemo/util/platform.dart' show isIOS;
 import 'package:gdgflutterdemo/util/constants.dart';
 
@@ -14,11 +20,19 @@ class _MainScreenState extends State<MainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   TabController _tabController;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: getTabs().length);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        changeTabIndex(context, _tabController.index);
+      }
+    });
+    Application.configureFcm(_fcm, context, _tabController);
+    saveDeviceToken();
   }
 
   @override
@@ -36,6 +50,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   Widget build(BuildContext context) {
     print("BUILD HERE IN MAIN SCREEN");
+    print(context);
     return isIOS
         ? CupertinoTabScaffold(
             resizeToAvoidBottomInset: true,
@@ -76,7 +91,7 @@ class _MainScreenState extends State<MainScreen>
             body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               controller: _tabController,
-              children: getScreens().map((screen) {
+              children: getScreens(context).map((screen) {
                 return screen;
               }).toList(),
             ),

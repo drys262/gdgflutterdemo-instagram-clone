@@ -9,6 +9,7 @@ function addUserDocument(user) {
   var displayName = user.displayName;
   var data = {
     displayName: displayName,
+    userId: uid,
     profile: {
       email: user.email,
       photoUrl: user.photoURL,
@@ -18,6 +19,7 @@ function addUserDocument(user) {
     active: true,
     noOfPosts: 0,
     noOfQuestions: 0,
+    tokens: []
   };
 
   return db.doc(`users/${uid}`).set(data);

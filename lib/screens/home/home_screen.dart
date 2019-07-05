@@ -10,6 +10,10 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:flutter/services.dart';
 
 class HomeScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  const HomeScreen({Key key, this.scaffoldKey}) : super(key: key);
+
   Future<void> _loadImages(BuildContext context) async {
     List<Asset> resultList;
     String error;
@@ -32,6 +36,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       floatingActionButton: FloatingActionButton(
         onPressed: () => _loadImages(context),
         child: Icon(Icons.add_a_photo),

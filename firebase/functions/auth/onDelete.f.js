@@ -7,5 +7,6 @@ exports = module.exports = functions
   .onDelete(user => {
     var db = admin.firestore();
     var uid = user.uid;
+    db.doc(`history/${uid}`).delete();
     return db.doc(`users/${uid}`).delete();
   });

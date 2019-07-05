@@ -34,13 +34,26 @@ List<Map<String, dynamic>> getWidgetOptions() {
   return widgetOptions;
 }
 
-List<Widget> getScreens() {
+List<Widget> getScreens(BuildContext context) {
+  List<GlobalKey<ScaffoldState>> globalKeys =
+      StoreProvider.of<AppState>(context).state.globalScaffoldKeys;
+
   final List<Widget> screens = [
-    HomeScreen(),
-    SearchScreen(),
-    NotificationsScreen(),
-    ProfileScreen(),
-    QuestionsScreen(),
+    HomeScreen(
+      scaffoldKey: globalKeys[0],
+    ),
+    SearchScreen(
+      scaffoldKey: globalKeys[1],
+    ),
+    NotificationsScreen(
+      scaffoldKey: globalKeys[2],
+    ),
+    ProfileScreen(
+      scaffoldKey: globalKeys[3],
+    ),
+    QuestionsScreen(
+      scaffoldKey: globalKeys[4],
+    ),
   ];
   return screens;
 }

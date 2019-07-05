@@ -1,5 +1,13 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:gdgflutterdemo/data/actions/route_actions.dart';
+import 'package:gdgflutterdemo/data/app_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 FacebookLogin _facebookLogin = FacebookLogin();
@@ -20,6 +28,10 @@ void logout() async {
   await _facebookLogin.logOut();
   await _googleSignIn.signOut();
   await _auth.signOut();
+}
+
+void changeTabIndex(BuildContext context, int index) {
+  StoreProvider.of<AppState>(context).dispatch(ChangeScaffoldKey(index));
 }
 
 void handleSignInGoogle() async {
@@ -47,5 +59,24 @@ void handleSignInFacebook() async {
       print(result.errorMessage);
       print("ERROR HERE");
       break;
+  }
+}
+
+void saveDeviceToken() async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  print(user);
+  print(user.uid);
+  String deviceToken = await FirebaseMessaging().getToken();
+  if (deviceToken != null) {
+    DocumentReference tokenRef = Firestore.instance
+        .collection('users')
+        .document(user.uid)
+        .collection('tokens')
+        .document(deviceToken);
+    await tokenRef.setData({
+      'token': deviceToken,
+      'createdAt': FieldValue.serverTimestamp(),
+      'platform': Platform.operatingSystem
+    });
   }
 }

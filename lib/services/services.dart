@@ -48,7 +48,7 @@ Future<void> uploadFileToStorage(
     String postId, CreatePostData createPostData) async {
   List<Asset> postImages = createPostData.postImages;
   for (Asset image in postImages) {
-    ByteData byteData = await image.requestOriginal(quality: 30);
+    ByteData byteData = await image.requestOriginal(quality: 100);
     Uint8List imageData = byteData.buffer.asUint8List();
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     String uuid = Uuid().v1();
