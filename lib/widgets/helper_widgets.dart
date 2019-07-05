@@ -8,7 +8,7 @@ import 'package:gdgflutterdemo/screens/notifications/notifications_screen.dart';
 import 'package:gdgflutterdemo/screens/profile/profile_screen.dart';
 import 'package:gdgflutterdemo/screens/questions/questions_screen.dart';
 import 'package:gdgflutterdemo/screens/search/search_screen.dart';
-import 'package:gdgflutterdemo/util/constants.dart';
+import 'package:gdgflutterdemo/util/constant.dart';
 
 BottomNavigationBarItem customNavBarItem(IconData icon, String title) {
   return BottomNavigationBarItem(

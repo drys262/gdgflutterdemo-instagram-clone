@@ -27,6 +27,8 @@ try {
     credential: admin.credential.applicationDefault(),
     storageBucket: "gdgflutterdemo.appspot.com"
   });
+  const settings = { timestampsInSnapshots: true };
+  admin.firestore().settings(settings);
 } catch (e) {
   console.log(e);
 }

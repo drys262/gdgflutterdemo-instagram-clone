@@ -47,7 +47,19 @@ const loadUsersWithoutCaller = async callerUserId => {
   });
 };
 
+const getTokenFromAUser = async userId => {
+  console.log("GET TOKEN FROM A USER HERE");
+  console.log(userId);
+  var db = admin.firestore();
+  let userSnapshot = await db.doc(`users/${userId}`).get();
+  let userTokens = userSnapshot.data().tokens;
+  console.log("USER TOKENS HERE HAHAH");
+  console.log(userTokens);
+  return userTokens;
+};
+
 module.exports = {
   loadAllUsers,
-  loadUsersWithoutCaller
+  loadUsersWithoutCaller,
+  getTokenFromAUser
 };

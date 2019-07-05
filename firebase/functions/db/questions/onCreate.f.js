@@ -3,7 +3,7 @@ const admin = require("firebase-admin");
 
 exports = module.exports = functions
   .region("asia-northeast1")
-  .firestore.document("posts/{postsId}")
+  .firestore.document("questions/{questionsId}")
   .onCreate((snap, context) => {
     const db = admin.firestore();
     const addToUserHistory = require("./onCreateUtils/addToUserHistory");

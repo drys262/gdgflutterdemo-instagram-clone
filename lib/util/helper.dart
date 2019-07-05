@@ -1,14 +1,21 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:gdgflutterdemo/config/application.dart';
 import 'package:gdgflutterdemo/data/actions/route_actions.dart';
 import 'package:gdgflutterdemo/data/app_state.dart';
+import 'package:gdgflutterdemo/data/models/user_data.dart';
+import 'package:gdgflutterdemo/services/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:uuid/uuid.dart';
 
 FacebookLogin _facebookLogin = FacebookLogin();
 FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,8 +71,6 @@ void handleSignInFacebook() async {
 
 void saveDeviceToken() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  print(user);
-  print(user.uid);
   String deviceToken = await FirebaseMessaging().getToken();
   if (deviceToken != null) {
     DocumentReference tokenRef = Firestore.instance
@@ -78,5 +83,40 @@ void saveDeviceToken() async {
       'createdAt': FieldValue.serverTimestamp(),
       'platform': Platform.operatingSystem
     });
+  }
+}
+
+Future handleCameraAndMic() async {
+  await PermissionHandler()
+      .requestPermissions([PermissionGroup.camera, PermissionGroup.microphone]);
+}
+
+void onCallUser(User caller, User receiver, BuildContext context) async {
+  await handleCameraAndMic();
+  String channelId = Uuid().v1();
+  String path = '/goToVideoCall/$channelId';
+  addChannelToFirestore(channelId, caller, receiver);
+  addReceiverNotification(channelId, caller, receiver);
+  Application.router
+      .navigateTo(context, path, transition: TransitionType.nativeModal);
+}
+
+void addReceiverNotification(
+    String channelId, User caller, User receiver) async {
+  try {
+    HttpsCallable callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: "httpVideoCallCreateChannel");
+    Map<String, dynamic> params = {
+      'caller': getUserInfo(caller),
+      'receiver': getUserInfo(receiver),
+      'channelId': channelId,
+    };
+    HttpsCallableResult result = await callable.call(params);
+  } on CloudFunctionsException catch (e) {
+    print(e.code);
+    print(e.message);
+    print(e.details);
+  } catch (e) {
+    rethrow;
   }
 }

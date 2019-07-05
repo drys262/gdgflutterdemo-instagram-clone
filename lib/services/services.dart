@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:gdgflutterdemo/data/app_state.dart';
 import 'package:gdgflutterdemo/data/models/create_post_data.dart';
+import 'package:gdgflutterdemo/data/models/user_data.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -22,17 +23,21 @@ Stream<QuerySnapshot> getCollectionStream(String collection) =>
         .orderBy("timestamp", descending: true)
         .snapshots();
 
+Map<String, dynamic> getUserInfo(User user) {
+  return {
+    'userId': user.uid,
+    'email': user.email,
+    'photoUrl': user.photoUrl,
+    'displayName': user.displayName
+  };
+}
+
 void addQuestionToFirestore(BuildContext context, String questionsText) async {
   AppState state = StoreProvider.of<AppState>(context).state;
-  FirebaseUser user = state.userData.user;
+  User user = User.fromFirebaseUser(state.userData.user);
   Map<String, dynamic> questionsData = {
     "questions": questionsText,
-    "user": {
-      "userId": user.uid,
-      "displayName": user.displayName,
-      "profileUrl": user.photoUrl,
-      "email": user.email
-    },
+    "user": getUserInfo(user),
     "timestamp": FieldValue.serverTimestamp()
   };
   Map<String, dynamic> userData = {'noOfQuestions': FieldValue.increment(1)};
@@ -60,15 +65,10 @@ Future<void> uploadFileToStorage(
 
 Future<void> addPostToFirestore(String postId, AppState state) async {
   CreatePostData createPostData = state.createPostData;
-  FirebaseUser user = state.userData.user;
+  User user = User.fromFirebaseUser(state.userData.user);
   Map<String, dynamic> postData = {
     "caption": createPostData.caption,
-    "user": {
-      "userId": user.uid,
-      "email": user.email,
-      "photoUrl": user.photoUrl,
-      "displayName": user.displayName
-    },
+    "user": getUserInfo(user),
     "timestamp": FieldValue.serverTimestamp()
   };
   Map<String, dynamic> userData = {'noOfPosts': FieldValue.increment(1)};
@@ -78,4 +78,18 @@ Future<void> addPostToFirestore(String postId, AppState state) async {
   batch.setData(postDoc, postData);
   batch.updateData(userDoc, userData);
   batch.commit();
+}
+
+Future<void> addChannelToFirestore(
+    String channelId, User caller, User receiver) async {
+  Map<String, dynamic> channelData = {
+    'channelId': channelId,
+    'caller': getUserInfo(caller),
+    'receiver': getUserInfo(receiver),
+    'createdAt': FieldValue.serverTimestamp()
+  };
+
+  return Firestore.instance
+      .document('video_call_channels/$channelId')
+      .setData(channelData);
 }

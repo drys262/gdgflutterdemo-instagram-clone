@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:gdgflutterdemo/data/app_state.dart';
+import 'package:gdgflutterdemo/data/models/user_data.dart';
 import 'package:gdgflutterdemo/util/helper.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_alert_dialog.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_button.dart';
@@ -44,24 +48,40 @@ class ProfileScreen extends StatelessWidget {
       ),
     ];
     Function show = isIOS ? showCupertinoDialog : showDialog;
+
+    AppState state = StoreProvider.of<AppState>(context).state;
+    User user = User.fromFirebaseUser(state.userData.user);
     return Scaffold(
       key: scaffoldKey,
-      body: Center(
-        child: AdaptiveButton(
-          onPressed: () {
-            show(
-              context: context,
-              builder: (BuildContext context) {
-                return AdaptiveAlertDialog(
-                  dialogTitle: logoutWarningTitle,
-                  content: logoutWarningMessage,
-                  actions: isIOS ? iosActions : androidActions,
-                );
-              },
-            );
-          },
-          text: "Logout",
-        ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              maxRadius: 70,
+              backgroundImage: CachedNetworkImageProvider(user.photoUrl),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 20),
+          ),
+          Text('${user.displayName}'),
+          AdaptiveButton(
+            onPressed: () {
+              show(
+                context: context,
+                builder: (BuildContext context) {
+                  return AdaptiveAlertDialog(
+                    dialogTitle: logoutWarningTitle,
+                    content: logoutWarningMessage,
+                    actions: isIOS ? iosActions : androidActions,
+                  );
+                },
+              );
+            },
+            text: "Logout",
+          ),
+        ],
       ),
     );
   }

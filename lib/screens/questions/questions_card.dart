@@ -21,7 +21,7 @@ class QuestionsCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: CircleAvatar(
                     backgroundImage: CachedNetworkImageProvider(
-                        currentDocument.data['user']["profileUrl"]),
+                        currentDocument.data['user']["photoUrl"]),
                   ),
                 ),
                 Flexible(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserData {
@@ -18,5 +19,20 @@ class User {
     this.email = data['email'];
     this.displayName = data['displayName'];
     this.photoUrl = data['photoUrl'];
+  }
+
+  User.fromDocSnapshot(DocumentSnapshot snapshot) {
+    Map<String, dynamic> data = snapshot.data;
+    this.uid = snapshot.documentID;
+    this.displayName = data['displayName'];
+    this.email = data['profile']['email'];
+    this.photoUrl = data['profile']['photoUrl'];
+  }
+
+  User.fromFirebaseUser(FirebaseUser user) {
+    this.uid = user.uid;
+    this.displayName = user.displayName;
+    this.email = user.email;
+    this.photoUrl = user.photoUrl;
   }
 }

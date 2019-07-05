@@ -8,6 +8,7 @@ class FirestoreStreamListView extends StatelessWidget {
   final Widget loadingWidget;
   final Widget errorWidget;
   final Function itemWidget;
+  final Function itemBuilder;
 
   static const Widget defaultLoadingWidget = Center(
     child: Text('Fetching ...'),
@@ -17,12 +18,19 @@ class FirestoreStreamListView extends StatelessWidget {
     child: Text("Error fetching"),
   );
 
+  static Widget getDefaultItemBuilder(
+      int index, List<DocumentSnapshot> documents, Function itemWidget) {
+    DocumentSnapshot currentDocument = documents[index];
+    return itemWidget(currentDocument);
+  }
+
   FirestoreStreamListView(
       {this.collectionStream,
       this.itemWidget,
       this.loadingWidget = defaultLoadingWidget,
       this.errorWidget = errorLoadingWidget,
-      this.collectionName = ""});
+      this.collectionName = "",
+      this.itemBuilder});
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +47,12 @@ class FirestoreStreamListView extends StatelessWidget {
               List<DocumentSnapshot> documents = snapshot.data.documents;
               return ListView.builder(
                 itemCount: documents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  DocumentSnapshot currentDocument = documents[index];
-                  return itemWidget(currentDocument);
-                },
+                itemBuilder: this.itemBuilder != null
+                    ? (BuildContext context, int index) => this
+                        .itemBuilder(context, index, documents, this.itemWidget)
+                    : (BuildContext context, int index) =>
+                        FirestoreStreamListView.getDefaultItemBuilder(
+                            index, documents, this.itemWidget),
               );
             }
           }

@@ -1,8 +1,6 @@
 const admin = require("firebase-admin");
 
 var db = admin.firestore();
-const settings = { timestampsInSnapshots: true };
-db.settings(settings);
 
 function addUserDocument(user) {
   var uid = user.uid;

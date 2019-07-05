@@ -44,14 +44,31 @@
   email: String,
 }
 
+@ video_call_channels/channelId
+- channelId: ID
+- caller: Map {
+    userId: ID,
+    email: String,
+    photoUrl: String,
+    displayName: String
+}
+- receiver: Map {
+    userId: ID,
+    email: String,
+    photoUrl: String,
+    displayName: String
+}
+- createdAt: Timestamp
+
+
 
 Tasks
 
 - Fix bug when adding post (images key bug)  @@ DONE
 - Set up CF to save to history every time a new post is added.  @@ DONE
-- Add Like to Post functionality.
-- Add Push notifications every time there is a new post. @@ DOING
+- Add Push notifications every time there is a new post. @@ DONE
 - Save Device Token when app is starting. @@ DONE
+- Add Like to Post functionality.
 - Let the user see who likes the post.
 - Add VideoCall Functionality.
 - Add Profile Section.

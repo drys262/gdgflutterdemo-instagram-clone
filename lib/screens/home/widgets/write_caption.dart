@@ -15,10 +15,6 @@ class WriteCaption extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Flexible(
-            flex: 1,
-            child: CaptionImage(),
-          ),
-          Flexible(
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.all(10.0),

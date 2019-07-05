@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:gdgflutterdemo/config/application.dart';
-import 'package:gdgflutterdemo/data/app_state.dart';
 import 'package:gdgflutterdemo/util/helper.dart';
 import 'package:gdgflutterdemo/widgets/helper_widgets.dart';
 import 'package:gdgflutterdemo/util/platform.dart' show isIOS;
-import 'package:gdgflutterdemo/util/constants.dart';
+import 'package:gdgflutterdemo/util/constant.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -49,8 +45,6 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    print("BUILD HERE IN MAIN SCREEN");
-    print(context);
     return isIOS
         ? CupertinoTabScaffold(
             resizeToAvoidBottomInset: true,
