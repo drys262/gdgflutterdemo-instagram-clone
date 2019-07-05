@@ -3,10 +3,10 @@ import './route_handlers.dart';
 
 class Routes {
   static String root = "/";
-  static String createPoll = "/createPoll";
+  static String createPost = "/createPost";
 
   static void configureRoutes(Router router) {
     router.define(root, handler: rootHandler);
-    router.define(createPoll, handler: createPollHandler);
+    router.define(createPost, handler: createPostHandler);
   }
 }

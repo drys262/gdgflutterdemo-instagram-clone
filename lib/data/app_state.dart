@@ -1,17 +1,15 @@
 import 'package:gdgflutterdemo/data/models/user_data.dart';
+import 'models/create_post_data.dart';
 
 class AppState {
   final UserData userData;
-  // final CreatePollData createPollData;
-  // final Map<String, dynamic> formData;
+  final CreatePostData createPostData;
 
   factory AppState.initial() {
     UserData userData = UserData(null, "");
-    // CreatePollData createPollData = CreatePollData(null, "");
-    // Map<String, dynamic> formData = {};
-    // return AppState(userData, createPollData, formData);
-    return AppState(userData);
+    CreatePostData createPostData = CreatePostData(null, "");
+    return AppState(userData, createPostData);
   }
 
-  AppState(this.userData);
+  AppState(this.userData, this.createPostData);
 }

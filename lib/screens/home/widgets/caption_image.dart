@@ -7,15 +7,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:gdgflutterdemo/data/app_state.dart';
 
-class CaptionImage extends StatefulWidget {
-  @override
-  _CaptionImageState createState() => _CaptionImageState();
-}
-
-class _CaptionImageState extends State<CaptionImage> {
+class CaptionImage extends StatelessWidget {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   final double imageWidth = 80;
-
   final double imageHeigth = 80;
 
   Widget _buildImage(BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -23,12 +17,8 @@ class _CaptionImageState extends State<CaptionImage> {
     print(snapshot.connectionState);
     if (snapshot.connectionState == ConnectionState.done) {
       if (snapshot.hasError) {
-        print("SNAPSHOT ERROR HERE");
-        print(snapshot.error);
         return Container(width: imageWidth, height: imageHeigth);
       } else {
-        print("SNAPSHOT DATA HERE");
-        print(snapshot.data);
         ByteData byteData = snapshot.data;
         Uint8List imageData = byteData.buffer.asUint8List();
         return Image(
@@ -52,8 +42,11 @@ class _CaptionImageState extends State<CaptionImage> {
   @override
   Widget build(BuildContext context) {
     print("BUILD HERE CAPTION IMAGE");
-    return Center(
-      child: Text('Caption Image'),
+    AppState state = StoreProvider.of<AppState>(context).state;
+    Asset firstImage = state.createPostData.postImages[0];
+    return FutureBuilder(
+      future: _getImage(firstImage),
+      builder: _buildImage,
     );
   }
 }

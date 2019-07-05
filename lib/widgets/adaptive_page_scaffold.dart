@@ -8,7 +8,7 @@ class AdaptivePageScaffold extends StatelessWidget {
   final List<Widget> actions;
 
   AdaptivePageScaffold(
-      {Key key, @required this.child, this.title, this.actions})
+      {Key key, @required this.child, this.title = "", this.actions})
       : super(key: key);
 
   @override

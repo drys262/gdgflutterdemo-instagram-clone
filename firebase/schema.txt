@@ -33,3 +33,14 @@ Questions
   email: String,
 }
 
+
+Tasks
+
+- Fix bug when adding post (images key bug)
+- Set up CF to save activities every time a new post is added.
+- Add Like to Post functionality.
+- Add Push notifications every time there is a new post.
+- Save Device Token when app is starting.
+- Let the user see who likes the post.
+- Add VideoCall Functionality.
+- Add Profile Section.

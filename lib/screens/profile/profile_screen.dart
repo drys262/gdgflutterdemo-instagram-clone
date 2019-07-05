@@ -1,40 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gdgflutterdemo/util/helper.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_alert_dialog.dart';
 import 'package:gdgflutterdemo/widgets/adaptive_button.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:gdgflutterdemo/data/app_state.dart';
-import 'package:gdgflutterdemo/data/models/user_data.dart';
 import 'package:gdgflutterdemo/util/platform.dart' show isIOS;
 
 class ProfileScreen extends StatelessWidget {
-  static final FacebookLogin _facebookLogin = FacebookLogin();
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-  static final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-    ],
-  );
-
-  final TabController tabController;
-  final List<Tab> tabs;
-
-  const ProfileScreen({Key key, this.tabController, this.tabs})
-      : super(key: key);
-
-  void _logout() async {
-    await _facebookLogin.logOut();
-    await _googleSignIn.signOut();
-    await _auth.signOut();
-  }
-
   void yesHandler(BuildContext context) {
-    _logout();
+    logout();
     Navigator.pop(context);
   }
 

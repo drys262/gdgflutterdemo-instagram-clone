@@ -20,19 +20,25 @@
 // }
 
 const glob = require("glob");
-const camelCase = require('camelcase');
-const admin = require('firebase-admin');
+const camelCase = require("camelcase");
+const admin = require("firebase-admin");
 try {
-    admin.initializeApp();
+  admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    storageBucket: "gdgflutterdemo.appspot.com"
+  });
 } catch (e) {
-    console.log(e);
+  console.log(e);
 }
 
-const files = glob.sync('./**/*.f.js', { cwd: __dirname });
+const files = glob.sync("./**/*.f.js", { cwd: __dirname });
 for (let f = 0, fl = files.length; f < fl; f++) {
-    const file = files[f];
-    const functionName = camelCase(file.slice(0, -5).split('/')); 
-    if (!process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === functionName) {
-        exports[functionName] = require(file);
-      }
+  const file = files[f];
+  const functionName = camelCase(file.slice(0, -5).split("/"));
+  if (
+    !process.env.FUNCTION_NAME ||
+    process.env.FUNCTION_NAME === functionName
+  ) {
+    exports[functionName] = require(file);
+  }
 }

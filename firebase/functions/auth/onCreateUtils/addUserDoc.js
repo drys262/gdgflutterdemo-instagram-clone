@@ -16,7 +16,8 @@ function addUserDocument(user) {
       coverPhotoUrl: user.photoURL
     },
     active: true,
-    noOfPosts: 0
+    noOfPosts: 0,
+    noOfQuestions: 0,
   };
 
   return db.doc(`users/${uid}`).set(data);
